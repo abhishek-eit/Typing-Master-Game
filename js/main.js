@@ -2,7 +2,7 @@ let layer2 = document.querySelector('#layer2');
 let lifeDiv = document.querySelector('#lifeNum');
 let scoreDiv = document.querySelector('#scoreNum');
 let results = document.querySelector('.results');
-let interval1, interval2;
+let interval1, interval2, interval3;    // for setIntervals
 
 let isActive = true;
 
@@ -33,16 +33,18 @@ window.addEventListener('blur',function(){
     isActive = false;
 })
 
-let wordArray = ["empty", "baseball", "violet", "healthy", "redundant", "mint", "barbarous", "three", "steer", "verse", "guess", "scrawny", "unbiased", "harm", "flash", "trick", "kitty", "flower", "scissors", "post", "abnormal", "fortunate", "jealous", "joyous", "clap", "eager", "agreement", "damaged", "hospitable", "crabby", "dull", "bright", "shop", "hushed", "plastic", "perfect", "prestigious", "friends", "strap", "crime", "tightfisted", "cover", "attack", "robust", "mother", "orange", "behavior", "love", "grass", "decorate", "beds", "level", "sturdy", "shop", "combative", "righteous", "repair", "pocket", "trap", "downtown", "spicy", "rampant", "historical", "tendency", "finger", "materialistic", "sack", "same", "sneeze", "hole", "horn", "luxuriant", "half", "company", "chance", "interrupt", "kettle", "lush", "flag", "careless", "jagged", "sparkle", "nifty", "brief", "remain", "pause", "vast", "moldy", "idiotic", "roasted", "property", "industry", "curve", "damaging", "moaning", "high", "incredible", "puffy", "trick", "price"];
+let wordArray = ["rack","rank","hook","miss","fade","flag","peak","harm","cold","lick","halt","keep","crop","loan","date","pain","hate","fork","calf","push","cast","camp","wood","unit","love","fuel","note","area","scan","live","know","item","salt","rice","tune","chew","call","knit","sick","pass","cute","tray","knot","blue","loud","riot","work","spit","star","card","ample","cable","floor","noise","layer","queue","bread","gaffe","spite","swipe","claim","crack","store","pride","beach","brain","blast","curve","brink","swing","teach","slide","fence","trade","thumb","doubt","owner","urine","proud","snail","faint","trail","cower","merit","study","sharp","blank","brand","salad","spend","worry","reign","prize","light","decay","swear","cream","black","voice","witch","occupy","fossil","format","divide","unique","Sunday","remain","differ","layout","visual","invite","revise","affect","seller","action","murder","scheme","damage","writer","voyage","breathe","analyst","peasant","mention","curtain","scratch","crystal","brother","passage","theater","disclose","priority","assembly","mistreat","aquarium","producer","invasion"];
 
 let divArray = [];
 let lifes = 3,
-    score = 0;
+    score = 0,
+    speed = 1;
 
 function start(){
     divArray = [];
     lifes = 3;
     lifeDiv.innerHTML = lifes;
+    speed = 1;
     score = 0;
     scoreDiv.innerHTML = score;
     makeCloud();
@@ -66,7 +68,7 @@ function start(){
                     html = html + '<span style="color: black;">' + word[i] + '</span>';
                 }
             }
-            html = html + '<img src="../images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
+            html = html + '<img src="images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
             div.innerHTML = html;
 
             // attach div to the layer
@@ -86,13 +88,13 @@ function start(){
         }
     }
 
-    interval2 = window.setInterval(animate,20);
+    interval2 = window.setInterval(animate,15);
 
     function animate(){
         if(isActive){
             divArray.forEach(function(obj,index){
                 if(parseInt(obj.div.style.top) < window.innerHeight){
-                    obj.div.style.top = (parseInt(obj.div.style.top) + 1) + "px" ;
+                    obj.div.style.top = (parseInt(obj.div.style.top) + speed) + "px" ;
                 } else {
                     loselife();
                     if(lifes != 0){
@@ -103,6 +105,11 @@ function start(){
             })
         }
     }
+
+    interval3 = window.setInterval(function(){
+        speed += 0.3;
+        console.log("speed increased");
+    }, 7000);
 
 }
 
@@ -130,7 +137,7 @@ function keyPressed(e){
                         html = html + '<span style="color: black;">' + divArray[i].word[j] + '</span>';
                     }
                 }
-                html = html + '<img src="../images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
+                html = html + '<img src="images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
                 divArray[i].div.innerHTML = html;                
 
                 // CHECK IF WORD IS COMPLETE
@@ -153,7 +160,7 @@ function keyPressed(e){
                         html = html + '<span style="color: black;">' + divArray[i].word[j] + '</span>';
                     }
                 }
-                html = html + '<img src="../images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
+                html = html + '<img src="images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
                 divArray[i].div.innerHTML = html; 
             }
 
@@ -173,7 +180,7 @@ function keyPressed(e){
                         html = html + '<span style="color: black;">' + divArray[i].word[j] + '</span>';
                     }
                 }
-                html = html + '<img src="../images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
+                html = html + '<img src="images/small-cloud.png" style="position: absolute; z-index: -1; width: 300%; transform: translate(-70%, -45%);">'
                 divArray[i].div.innerHTML = html; 
 
             }
@@ -192,6 +199,7 @@ function loselife() {
 
 function EndGame() {
     clearInterval(interval1);
+    clearInterval(interval2);
     clearInterval(interval2);
     document.querySelector('#resultsNum').innerHTML = score;
     results.style.display = "block";
